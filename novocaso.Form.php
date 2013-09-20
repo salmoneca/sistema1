@@ -4,10 +4,33 @@
 			function myFunction()
 			{
 				alert("Cadastro com Sucesso");
-				//document.getElementById("demo").innerHTML="Cadastro com Sucesso";
 				
-			}
+				//document.write("<p>Titulo</p>");
+				//window.location.assign("novocasoFormulario.php");
 			
+			/*  // inicio	
+				var objForm = document.novocaso;
+				var printTitulo = document.novocaso.titulo;
+				var printTema = document.novocaso.tema;
+				var objPreVis = document.getElementById("previsualizacao");
+	
+				var textoCompleto = "titulo: "+printTitulo.value+"<br>";
+				textoCompleto += "tema: "+printTema.value+"<br><br>";
+				textoCompleto += "<input type='button' onclick='enviaForm()' value='Enviar Formulário'>";
+				
+				objPreVis.innerHTML = textoCompleto;
+				objForm.style.display = "none";
+				objPreVis.style.display = "block";
+				*/
+			}
+			/* // continuacao da funcao de cima que chama essa
+			function enviaForm() {
+				var objForm = document.form1;
+				objForm.action = "novocasoFormulario.Form.php";
+				objForm.method = "post";
+				objForm.submit();
+			} //fim 
+			*/
 		</script>
 	</head>
 </html>

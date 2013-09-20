@@ -2,7 +2,14 @@
 
 	include_once "../persist/SqlManager.class.php";
 	
-
+	echo "<form action='novocasoFormulario.Form.php' name='novocaso' method='post'>";
+	echo "<table align='center' cellpadding='0' cellspacing='5px'>";
+	echo "<tr>";
+	echo "<td>aqui</td>";
+echo "</tr>";
+echo "</table>";
+echo "</form>";
+	
 	$codigocaso = rand(0,9999999999);
 	
 	$idfoto = rand(0,9999999999);
@@ -17,9 +24,16 @@
 	$novatag = utf8_encode($_POST["novatag"]);
 	$idgrupotag = 5; // Minhas Tags.
 	
+
 	$conn = new SqlManager("connect");
 	
-	
+//inicio: inserir foto bd:	
+	//$binary = file_get_contents("somefile.jpg");
+	//$base64 = base64_encode($binary);
+	//pg_query("create tables pictures (picture text)");
+	// pg_query("insert into pictures (picture) values ('$base64')");
+//fim.
+
 	$query1 = "INSERT INTO tag VALUES ('" . $idtag. "', '" . $novatag . "', '" . $idgrupotag . "')";
 	$numLinhas1 = $conn->executeCommand($query1);
 	
@@ -88,11 +102,12 @@
 	}
 	echo "'$return'";
 	*/
+	
 	$conn->closeConnection();
 	
 	if ( $numLinhas == 1 )
-		header('Location: index.php?flag=1&page=novocaso&ret1='. $return);
+		header('Location: index.php?flag=1&page=novocasoFormulario&ret1='. $codigocaso);
 	else
-		header('Location: index.php?flag=0&page=novocaso&ret1='. $return);
+		header('Location: index.php?flag=0&page=novocasoFormaulario&ret1='. $codigocaso);
 	
 ?>
