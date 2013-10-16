@@ -7,30 +7,7 @@
 				
 				//document.write("<p>Titulo</p>");
 				//window.location.assign("novocasoFormulario.php");
-			
-			/*  // inicio	
-				var objForm = document.novocaso;
-				var printTitulo = document.novocaso.titulo;
-				var printTema = document.novocaso.tema;
-				var objPreVis = document.getElementById("previsualizacao");
-	
-				var textoCompleto = "titulo: "+printTitulo.value+"<br>";
-				textoCompleto += "tema: "+printTema.value+"<br><br>";
-				textoCompleto += "<input type='button' onclick='enviaForm()' value='Enviar Formulário'>";
-				
-				objPreVis.innerHTML = textoCompleto;
-				objForm.style.display = "none";
-				objPreVis.style.display = "block";
-				*/
 			}
-			/* // continuacao da funcao de cima que chama essa
-			function enviaForm() {
-				var objForm = document.form1;
-				objForm.action = "novocasoFormulario.Form.php";
-				objForm.method = "post";
-				objForm.submit();
-			} //fim 
-			*/
 		</script>
 	</head>
 </html>
@@ -41,74 +18,182 @@
 	$conn = new SqlManager("connect");
 	
 	
-	echo "<form action='novocaso.php' name='novocaso' method='post'>";
+	echo "<form action='novocaso.php' name='novocaso' method='post' enctype='multipart/form-data' class='yui-skin-sam'>";
 	echo "<table align='center' cellpadding='0' cellspacing='5px'>";
 	echo "<tr>";
 	
+	// inicio:Para colocar o Text Editing Tools
+	echo "
+	<link rel='stylesheet' type='text/css' href='http://yui.yahooapis.com/2.9.0/build/menu/assets/skins/sam/menu.css' />
+	<link rel='stylesheet' type='text/css' href='http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css' />
+	<link rel='stylesheet' type='text/css' href='http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css' />
+	<link rel='stylesheet' type='text/css' href='http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css' />
+	<link rel='stylesheet' type='text/css' href='http://yui.yahooapis.com/2.9.0/build/editor/assets/skins/sam/editor.css' />
+	<script src='http://yui.yahooapis.com/3.5.0/build/yui/yui-min.js'></script>
+	<script type='text/javascript' src='http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js'></script>
+	<script type='text/javascript' src='http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js'></script>
+	<script type='text/javascript' src='http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js'></script>
+	<script type='text/javascript' src='http://yui.yahooapis.com/2.9.0/build/element/element-min.js'></script>
+	<script type='text/javascript' src='http://yui.yahooapis.com/2.9.0/build/container/container-min.js'></script>
+	<script type='text/javascript' src='http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js'></script>
+	<script type='text/javascript' src='http://yui.yahooapis.com/2.9.0/build/button/button-min.js'></script>
+	<script type='text/javascript' src='http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js'></script>
+	";
+	echo "<script>(function() { 
+	    //Setup some private variables 
+	    var Dom = YAHOO.util.Dom, 
+	        Event = YAHOO.util.Event; 
+	 
+	        //The Editor config 
+	        var myConfig = { 
+	            height: '300px', 
+	            width: '600px', 
+	            animate: true, 
+	            dompath: true, 
+	            focusAtStart: true 
+	        }; 
+	 
+	    //Now let's load the Editor.. 
+	    var myEditor = new YAHOO.widget.Editor('editor', myConfig); 
+	    myEditor.render(); 
+	})(); 
+		</script>";
+		
+	echo "<script>
+		var stripHTML = /<\S[^><]*>/g; 
+		myEditor.get('textarea').value = myEditor.get('textarea').value.replace(/<br>/gi, '\n').replace(stripHTML, ''); 
+		 
+		//From the textarea to the Editor 
+		myEditor.setEditorHTML(myEditor.get('textarea').value.replace(/\n/g, '<br>')); 
+	</script>";
+	
+	echo "<script>
+		myEditor.saveHTML(); 
+		var stripHTML = /<\S[^><]*>/g; 
+		myEditor.get('textarea').value = myEditor.get('textarea').value.replace(/<br>/gi, '\n').replace(stripHTML, ''); 
+		 
+		var fc = myEditor.get('element').previousSibling, 
+			el = myEditor.get('element'); 
+		 
+		Dom.setStyle(fc, 'position', 'absolute'); 
+		Dom.setStyle(fc, 'top', '-9999px'); 
+		Dom.setStyle(fc, 'left', '-9999px'); 
+		myEditor.get('element_cont').removeClass('yui-editor-container'); 
+		Dom.setStyle(el, 'visibility', 'visible'); 
+		Dom.setStyle(el, 'top', ''); 
+		Dom.setStyle(el, 'left', ''); 
+		Dom.setStyle(el, 'position', 'static'); 
+	</script>";
+	
+	echo "
+	<script>	
+	var fc = myEditor.get('element').previousSibling, 
+	    el = myEditor.get('element'); 
+	 
+	Dom.setStyle(fc, 'position', 'static'); 
+	Dom.setStyle(fc, 'top', '0'); 
+	Dom.setStyle(fc, 'left', '0'); 
+	Dom.setStyle(el, 'visibility', 'hidden'); 
+	Dom.setStyle(el, 'top', '-9999px'); 
+	Dom.setStyle(el, 'left', '-9999px'); 
+	Dom.setStyle(el, 'position', 'absolute'); 
+	myEditor.get('element_cont').addClass('yui-editor-container'); 
+	YAHOO.log('Reset designMode on the Editor', 'info', 'example'); 
+	myEditor._setDesignMode('on'); 
+	YAHOO.log('Inject the HTML from the textarea into the editor', 'info', 'example'); 
+	myEditor.setEditorHTML(myEditor.get('textarea').value.replace(/\n/g, '<br>')); 
+	</script>
+	";
+	// fim:Para colocar o Text Editing Tools
+	
+	echo "<br><h3 align='center'>Criar Novo Caso</h3>";
 	echo "<td align='right'><label>Titulo:</label></td>";
-	echo "<td align='left'><textarea name='titulo' rows='1'cols='30'></textarea></td>";
-	//echo "<td align='left'><input type='text' name='titulo'/></td>";
+	//echo "<td align='left'><textarea name='titulo' rows='1' cols='40'></textarea></td>";
+	echo "<td align='left'><input type='text' size='20' name='titulo'/></td>";
 	echo "</tr>";
 	
 	echo "<td align='right'><label>Tema:</label></td>";
-	echo "<td align='left'><textarea name='tema' rows='1'cols='30'></textarea></td>";
-	//echo "<td align='left'><input type='text' name='tema'/></td>";
+	//echo "<td align='left'><textarea name='tema' rows='1'cols='30'></textarea></td>";
+	echo "<td align='left'><input type='text' size='20' name='tema'/></td>";
 	echo "</tr>";
-	
+		
 	echo "<tr>";
 	echo "<td align='right'><label>Descrição:</label></td>";
+	echo "<td align='left'>";	
+		echo "<br><span>Recomendamos o uso do template oferecido, mas fique à vontade para não usa-lo.(Max.3000 caracteres)</span>";
+		echo "<textarea id='editor' name='editor' rows='20' cols='145'>";
+		echo "
+		<strong style='font-size: 18px; '>Problema</strong><br>
+		<ul>
+		<li>Quem é o usuário?</li>
+		<li>O que ele precisa fazer?</li>
+		<li>Como ele quer fazer? Quando? Por quê?</li>
+		</ul>
+		<br>
+		<strong style='font-size: 18px; '>Solução</strong><br>
+		<ul>
+		<li>Qual é a solução?</li>
+		<li>Quando ela deve ser utilizada? Como? Por quê?</li>
+		<li>Como essa solução se compara as de outros sistemas?</li>
+		</ul>
+		<br>
+		<strong style='font-size: 18px; '>Avaliação</strong><br>
+		<ul>
+		<li>O que deu certo nessa solução? Por quê?</li>
+		<li>O que deu errado nessa solução? Por quê?</li>
+		<li>Qual é a avaliação geral dessa solução (sucesso ou fracasso)?</li>
+		</ul>
+		";
+	echo "</textarea><br>";
+	echo "</td>";
+	echo "</tr>";	
+	
+	/*
+	echo "<td align='right'><label>Descrição:</label></td>";
 	echo "<td align='left'>
-		<textarea name='descricao' rows='20'cols='80'></textarea>
-	</td>";
-	//echo "<td align='left'><input type='text' name='descricao'/></td>";
-	echo "</tr>";
+		<textarea name='descricao' rows='20'cols='145'>";
+			echo "
+I) Problema
+			
+	- Quem é o usuário?
+	- O que ele precisa fazer?
+	- Como ele quer fazer? Quando? Por quê?
+			
+II) Solução
+			
+	- Qual é a solução?
+	- Quando ela deve ser utilizada? Como? Por quê?
+	- Como essa solução se compara as de outros sistemas?
+			
+III) Avaliação
+			
+	- O que deu certo nessa solução? Por quê?
+	- O que deu errado nessa solução? Por quê?
+	- Qual é a avaliação geral dessa solução (sucesso ou fracasso)?";
+
+	echo "</textarea></td>";
+	//echo "<td align='left'><input type='text' name='descricao'/></td>";*/
+	//echo "</tr>";
+	
 	echo "<tr>";
-	
-	
 	echo "<td align='right'><label>Idioma:</label></td>";
 	echo "<td align='left'><select name='idioma'>";
-	echo "<option value='Portugues'>Português</option>";
+	echo "<option value='Portugues' selected>Português</option>";
 	echo "<option value='Ingles'>Inglês</option>";
 	echo "<option value='Espanhol'>Espanhol</option>";
 	echo "</td></select>";
-	
-	
-	//echo "<td align='left'><textarea name='idioma' rows='1'cols='20'></textarea></td>";
-	
-	
-	//echo "<td align='left'><input type='text' name='idioma'/></td>";
-	/*echo "</tr>";
-	
-		function envia_pdf()
-			{
-				// VERIFICA SE O CAMPO PDF ESTÁ VAZIO
-				if ($_FILES['nomefoto']['name'] != "") {
-					
-					// SE O CAMPO NÃO ESTIVER VAZIO MOVE O ARQUIVO PARA UMA PASTA
-					move_uploaded_file($_FILES['nomefoto']['tmp_name'],"PASTA/".$_FILES['nomefoto']['name']);
-					 
-					// $PDF_PATH É A VARIAVEL Q GUARDA O ENDEREÇO DO PDF(pra adicionar na base de dados)
-					$pdf_path = "PASTA/".$_FILES['nomefoto']['name'];
-				} 
-				else {
-					//CASO SEJA FALSO RETORNA ERRO
-					echo "Não foi possível enviar o arquivo";
-				}
-			}*/
-	
-	
 	
 	// inicio: postar foto 
 	echo "<tr>";
 	echo "<td align='right'><label>Foto:</label></td>";
 	//echo "<td name='nomefoto'><input id='attachmentInput1' name='attachment[]' type='file' onChange='on_file_select(this)' /></td>";//onclick='envia_pdf()'
-	echo "<td><form action='upload.php' method='post' enctype='multipart/form-data'>";
-	echo "<input type='file' name='nomefoto'>
-		</br>
-		</form></td>";
+	//echo "<td><form action='upload.php' method='post' enctype='multipart/form-data'>";
+	echo "<td>";
+	echo "<input type='file' name='nomefoto'/></br>(O limite de tamanho é de 20 MB.)";
+	//echo "</form>";
+	echo "</td>";
 	echo "</tr>";
 	// fim: postar foto
-	
 	
 	
 	// inicio 
@@ -131,12 +216,48 @@
 	echo "</table>";
 	*/
 	//fim
-	
+	/*echo "
+	<script>
+		var xmlhttp = false;
+
+		try {
+		xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
+		alert ('You are using Microsoft Internet Explorer.');
+		} catch (e) {
+		try {
+
+		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
+		alert ('You are using Microsoft Internet Explorer');
+		} catch (E) {
+
+		xmlhttp = false;
+		}
+		}
+
+		if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+		xmlhttp = new XMLHttpRequest();
+		alert ('You are not using Microsoft Internet Explorer');
+		}
+		
+		function makerequest(serverPage, objID) {
+			var obj = document.getElementById(objID);
+			xmlhttp.open('GET', serverPage);
+			xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			obj.innerHTML = xmlhttp.responseText;
+			}
+			}
+			xmlhttp.send(null);
+			}
+	</script>
+	";*/
 	// ************************************************************************************
 	echo "<tr>";
-	
-	echo "<td align='right'><label>Nova Tag:</label></td>";
-	echo "<td align='left'><textarea name='novatag' rows='1'cols='30'></textarea></td>";
+	echo "<td align='right'><label><br>Nova Tag:</label>
+	</td>";
+	echo "<td align='left'><br><textarea name='nometag' rows='1'cols='30'></textarea>
+	<input type='button' id='actionDivToggle' onClick='getScores();' value='Adicionar Tag'>
+	</td>";
 	//echo "<td align='left'><input type='text' name='titulo'/></td>";
 	echo "</tr>";
 	
@@ -180,27 +301,28 @@
 	// aqui 
 	echo "<table id='searchTableTelaToda' class='searchTableTelaToda'>";
 	echo "<tr><td class='indexTags'>";
+	
 	echo "<div class='indexTitle'> Tipos de Ação : ";
-	echo "<input type='button' id='actionDivToggle' onClick='toogle_div('actionTypeTagDiv', 'actionDivToggle');' value='-'>";
+	echo "<input type='button' id='actionDivToggle' onClick='loadXMLDoc();' value='-'>";
 	echo "</div>";
 	echo "<div id='actionTypeTagDiv'>";
-	echo "<tr><td align='left'>"; //<select name='nometag'>";
+	echo "<tr><td align='left' class='caseTableDescricao'>"; //<select name='nometag'>";
 	
 	foreach ( $result2 as $row2 ) 
 	{
 		$valor2 = utf8_decode($row2["nometag"]);
-		
-			echo "<div id =\"divTag".$row2["idtag"]."\">
+			
+			echo "<a id =\"divTag".$row2["idtag"]."\">
 			<input type=\"checkbox\" name=\"actionTag\" id=\"tagCB" . $row2["idtag"] . "\" value=\"" . $row2["idtag"] . "\" 
 			onClick=\"toogle_checkbox('tagCB{$row2["idtag"]}', {$row2["idtag"]})\" >" . $valor2 . "  
 			<span class = \"caseCountSpan\" id=\"spanTag" . $row2["idtag"] . "\">
-			</span></div>";
+			</span></a>";
 	}
 	echo "</td></tr>";
 	echo "</div>";
 	echo "</td>"; 
 	
-	echo "</tr>";
+//	echo "</tr>";
 	// fim 
 	
 	// aqui 
@@ -209,7 +331,7 @@
 	echo "	<input type='button' id='actionDivToggle' onClick='toogle_div('actionTypeTagDiv', 'actionDivToggle');' value='-'>";
 	echo "</div>";
 	echo "<div id='actionTypeTagDiv'>";
-	echo "<tr><td align='left'>"; //<select name='nometag'>";
+	echo "<tr><td align='left' class='caseTableDescricao'>"; //<select name='nometag'>";
 	
 	foreach ( $result3 as $row3 ) 
 	{
@@ -236,17 +358,17 @@
 	echo "</div>";
 	echo "<div id='actionTypeTagDiv'>";
 	echo "<tr>";
-	echo "<td align='left'>"; //<select name='nometag'>";
+	echo "<td align='left' class='caseTableDescricao'>"; //<select name='nometag'>";
 	
 	foreach ( $result4 as $row4 )
 	{
 		$valor4 = utf8_decode($row4["nometag"]);
 			
-				echo "<div id =\"divTag".$row4["idtag"]."\">
+				echo "<a id =\"divTag".$row4["idtag"]."\">
 				<input type=\"checkbox\" name=\"actionTag\" id=\"tagCB" . $row4["idtag"] . "\" value=\"" . $row4["idtag"] . "\" 
 				onClick=\"toogle_checkbox('tagCB{$row4["idtag"]}', {$row4["idtag"]})\" >" . $valor4 . " 
 				<span class = \"caseCountSpan\" id=\"spanTag" . $row4["idtag"] . "\">
-				</span></div>";
+				</span></a>";
 	}
 		
 	echo "</div>";
@@ -263,17 +385,17 @@
 	echo "</div>";
 	echo "<div id='actionTypeTagDiv'>";
 	echo "<tr>";
-	echo "<td align='left'>"; //<select name='nometag'>";
+	echo "<td align='left' class='caseTableDescricao'>"; //<select name='nometag'>";
 	
 	foreach ( $result5 as $row5 )
 	{
 		$valor5 = utf8_decode($row5["nometag"]);
 			
-				echo "<div id =\"divTag".$row5["idtag"]."\">
+				echo "<a id =\"divTag".$row5["idtag"]."\">
 				<input type=\"checkbox\" name=\"actionTag\" id=\"tagCB" . $row5["idtag"] . "\" value=\"" . $row5["idtag"] . "\" 
 				onClick=\"toogle_checkbox('tagCB{$row5["idtag"]}', {$row5["idtag"]})\" >" . $valor5 . " 
 				<span class = \"caseCountSpan\" id=\"spanTag" . $row5["idtag"] . "\">
-				</span></div>";
+				</span></a>";
 	}
 		
 	echo "</div>";
@@ -291,17 +413,17 @@
 	echo "</div>";
 	echo "<div id='actionTypeTagDiv'>";
 	echo "<tr>";
-	echo "<td align='left'>"; //<select name='nometag'>";
+	echo "<td align='left' class='caseTableDescricao'>"; //<select name='nometag'>";
 	
 	foreach ( $result6 as $row6 )
 	{
 		$valor6 = utf8_decode($row6["nometag"]);
 			
-				echo "<div id =\"divTag".$row6["idtag"]."\">
+				echo "<a id =\"divTag".$row6["idtag"]."\">
 				<input type=\"checkbox\" name=\"actionTag\" id=\"tagCB" . $row6["idtag"] . "\" value=\"" . $row6["idtag"] . "\" 
 				onClick=\"toogle_checkbox('tagCB{$row6["idtag"]}', {$row6["idtag"]})\" >" . $valor6 . " 
 				<span class = \"caseCountSpan\" id=\"spanTag" . $row6["idtag"] . "\">
-				</span></div>";
+				</span></a>";
 	}
 		
 	echo "</div>";
@@ -317,7 +439,6 @@
 	echo "<td colspan='2' align='center' onclick='myFunction()'><input type='submit' value='Salvar'/></td>";
 	echo "</tr>";
 	
-	echo "<tr><td id='demo'></td></tr>";
 	echo "</table>";
 	echo "</table>";
 	echo "</form>";
@@ -327,5 +448,6 @@
 	{
 		echo $_GET["ret1"];
 	}
+	
 	$conn->closeConnection();
 ?>
